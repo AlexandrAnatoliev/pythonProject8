@@ -35,8 +35,11 @@ def start(m, res=False):
 # Получение сообщений от юзера
 @bot.message_handler(content_types=["text"])
 def handle_text(message):
-    # Если юзер прислал 1, выдаем ему случайный анекдот
-    if message.text.strip().lower() == 'рецепт':  # правильные запросы "Рецепт" и "рецепт"
+    # Формируем запрос юзера в виде списка (убираем предлоги) и уменьшаем регистр
+    user_question = [a.lower() for a in message.text.split() if len(a) > 3]
+
+    # Если юзер прислал "Рецепт", выдаем ему случайный рецепт
+    if 'рецепт' in user_question:  # правильные запросы "Рецепт" и "рецепт"
         answer = random.choice(recipes)
         # Отсылаем юзеру сообщение в его чат
         bot.send_message(message.chat.id, answer)
