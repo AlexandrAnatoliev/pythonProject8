@@ -1,11 +1,11 @@
-# pythonProject3
+# pythonProject8
 
-[Ru] БОТ, ДЛЯ TELEGRAM-КАНАЛА С АНЕКДОТАМИ. По нажатию кнопки бот присылает случайный анекдот в личку сообщение.
+[Ru] БОТ, ДЛЯ TELEGRAM-КАНАЛА С РЕЦЕПТАМИ. По нажатию кнопки бот присылает случайный рецепт в личку сообщение.
 
 ## Требования
 
 * $ pip install -r требования.txt
-* создать файл funs.txt, который содержит список анекдотов. ВАЖНО! На каждой строке файлов находится по одному анекдоту
+* создать файл recipes.txt, который содержит список анекдотов. ВАЖНО! На каждой строке файлов находится по одному анекдоту
 * создать файл config.py, в котором будут храниться токен для доступа к боту и адрес канала в виде
 ```python
 token = "1234567890:ASDFGHH..."
@@ -29,7 +29,7 @@ from config import token
 
 ```python
 f = open('recipes.txt', 'r', encoding='UTF-8')
-funs = f.read().split('\n')
+recipes = f.read().split('\n')
 f.close()
 ```
 #### Если текстовый файл находится не в каталоге программы, то пишем полный путь к нему: "C:/Users/Александр/OneDrive/Рабочий стол/python/FreelanceTask2/freelanceTask3/firstText.txt" (использ.:'/'!)
@@ -41,10 +41,10 @@ f.close()
 def start(m, res=False):
     # Добавляем кнопку
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    item1 = types.KeyboardButton("Анекдот")
+    item1 = types.KeyboardButton("Рецепт")
     markup.add(item1)
     bot.send_message(m.chat.id,
-                     'Нажми: \nАнекдот для получения интересного анекдота ',
+                     'Нажми: \nРецепт для получения свежего рецепта ',
                      reply_markup=markup)
 ```
 #### Запускаем бота

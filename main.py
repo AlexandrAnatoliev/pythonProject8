@@ -7,19 +7,13 @@ import telebot
 import random
 from telebot import types
 
-# from config import token
-
-# Удалить перед GIT
-# токен рабочего бота
-token = "5976923177:AAE37XmrmAw7Ci5vsjPxBfKfiqS91NzcBvI"
-# тестовый токен
-# token = "5943261012:AAENwlcynSTVsyFMUSFIX9CVde_73XwNy-Q"
+from config import token
 
 # Загружаем список анекдотов из файла
 # если текстовый файл находится не в каталоге программы, то пишем полный путь к нему
 # "C:/Users/Александр/OneDrive/Рабочий стол/python/FreelanceTask2/freelanceTask3/firstText.txt" (использ.:'/'!)
 f = open('recipes.txt', 'r', encoding='UTF-8')
-funs = f.read().split('\n\n\n')
+recipes = f.read().split('\n\n\n')
 f.close()
 
 # Создаем бота
@@ -43,7 +37,7 @@ def start(m, res=False):
 def handle_text(message):
     # Если юзер прислал 1, выдаем ему случайный анекдот
     if message.text.strip() == 'Рецепт':
-        answer = random.choice(funs)
+        answer = random.choice(recipes)
         # Отсылаем юзеру сообщение в его чат
         bot.send_message(message.chat.id, answer)
 
