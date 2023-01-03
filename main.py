@@ -36,7 +36,7 @@ def start(m, res=False):
 @bot.message_handler(content_types=["text"])
 def handle_text(message):
     # Если юзер прислал 1, выдаем ему случайный анекдот
-    if message.text.strip() == 'Рецепт':
+    if message.text.strip() == 'Рецепт' or 'рецепт':
         answer = random.choice(recipes)
         # Отсылаем юзеру сообщение в его чат
         bot.send_message(message.chat.id, answer)
