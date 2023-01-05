@@ -38,7 +38,6 @@ def search_recipe(question, recipes_list):
     for recipe in recipes_list:
         counter = 0
         for word in question:
-            word = str(word[:-1])
             recipe_low = str(recipe.lower())
             if word in recipe_low:
                 counter += 1
@@ -58,45 +57,59 @@ def start(m, res=False):
     item1 = types.KeyboardButton("Рецепт")
     markup.add(item1)
     bot.send_message(m.chat.id,
-                     'Нажми: \nРецепт для получения свежего рецепта ',
+                     'Нажми: \n"Рецепт", чтобы получить случайный рецепт или "Пирог из яблок", если Вы ищете какое-то конкретное блюдо',
                      reply_markup=markup)
+
+
+def get_question(question_in):
+    """
+    Формируем запрос юзера в виде списка (убираем предлоги), уменьшаем регистр, заменяем часть букв на английские, обрезаем окончания у слов
+    :param question_in: строка запроса от юзера
+    :return: список слов для поиска [с заменой на английские буквы], [только русские буквы]
+    """
+    ru_question = [a.lower() for a in question_in.text.split() if len(a) > 3]
+    # словарь 'русская буква':'латинская буква'
+    d_chars = {'А': 'A', 'а': 'a', 'В': 'B', 'е': 'e', 'Е': 'E', 'К': 'K', 'М': 'M', 'Н': 'H', 'о': 'o', 'О': 'O',
+               'Р': 'P', 'с': 'c', 'С': 'C', 'Т': 'T', 'х': 'x', 'Х': 'X'}
+    eng_question = []
+    for word in ru_question:
+        for char in d_chars:
+            if char in word:
+                while char in word:
+                    word = word.replace(char, d_chars[char])
+        eng_question.append(word[:-1])  # обрезаем окончание у слов "яблоки" -> "яблок"
+    return eng_question, ru_question
 
 
 # Получение сообщений от юзера
 @bot.message_handler(content_types=["text"])
 def handle_text(message):
-    # Формируем запрос юзера в виде списка (убираем предлоги) и уменьшаем регистр
-    user_question = [a.lower() for a in message.text.split() if len(a) > 3]
-    # словарь 'русская буква':'латинская буква'
-    d_chars = {'А': 'A', 'а': 'a', 'В': 'B', 'е': 'e', 'Е': 'E', 'К': 'K', 'М': 'M', 'Н': 'H', 'о': 'o', 'О': 'O',
-               'Р': 'P', 'с': 'c', 'С': 'C', 'Т': 'T', 'х': 'x', 'Х': 'X'}
-    # заменяем русские буквы на английские
-    user_question2 = []
-    for word in user_question:
-        for char in d_chars:
-            if char in word:
-                while char in word:
-                    word = word.replace(char, d_chars[char])
-        user_question2.append(word)
-
+    # Формируем запрос юзера в виде списка (убираем предлоги) и уменьшаем регистр[ английские буквы],[русские]
+    user_question_en, user_question_ru = get_question(message)
     promo = random.choice(prom_list)  # реклама
 
-    # Если сообщение от юзера содержит слово "рецепт", выдает ему случайный рецепт
-    if 'рецепт' in user_question and len(user_question) == 1:  # правильные запросы "Рецепт" и "рецепт"
+    # Если сообщение от юзера содержит слово "рецепт" (!рецепт содержит английские буквы), выдает ему случайный рецепт
+    if 'рецепт' in user_question_ru:  # правильные запросы "Рецепт" и "рецепт"
         answer = random.choice(recipes)  # рецепт
         answer += '\n\n' + promo
         # Отсылаем юзеру сообщение в его чат
         bot.send_message(message.chat.id, answer)
-    elif len(user_question) > 1:
-        answer = search_recipe(user_question2, recipes)
+    elif len(user_question_en) > 1:
+        answer = search_recipe(user_question_en, recipes)
         if len(answer) > 0:
             answer += '\n\n' + promo
             # посылаем юзеру найденный рецепт
             bot.send_message(message.chat.id, answer)
         else:
-            bot.send_message(message.chat.id, "К сожалению, я не нашел такого рецепта. Напишите мне: \"Рецепт\"")
+            bot.send_message(message.chat.id, """К сожалению, я не знаю таких слов. Напишите мне:
+                         \n \"Рецепт\", чтобы получить случайный рецепт.
+                         \n "Пирог из яблок", если Вы ищете какое-то конкретное блюдо
+                         \n "Яйца яблоки бананы", в случае, если нужен совет, что приготовить из конкретных продуктов""")
+
+
     else:
-        bot.send_message(message.chat.id, "К сожалению, я не знаю таких слов. Напишите мне: \"Рецепт\"")
+        bot.send_message(message.chat.id,
+                         "К сожалению, слишком короткий запрос. Напишите подробней: \"Пирог из яблок\"")
 
 
 # Запускаем бота
