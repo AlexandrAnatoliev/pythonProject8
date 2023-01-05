@@ -44,7 +44,7 @@ def handle_text(message):
     user_question = [a.lower() for a in message.text.split() if len(a) > 3]
 
     # Если сообщение от юзера содержит слово "рецепт", выдает ему случайный рецепт
-    if 'рецепт' in user_question:  # правильные запросы "Рецепт" и "рецепт"
+    if 'рецепт' in user_question and len(user_question) == 1:  # правильные запросы "Рецепт" и "рецепт"
         answer = random.choice(recipes)  # рецепт
         promo = random.choice(prom_list)  # реклама
         answer += '\n\n' + promo
