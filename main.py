@@ -9,12 +9,17 @@ from telebot import types
 
 from config import token
 
-# Загружаем список анекдотов из файла
+# Загружаем список рецептов из файла recipes.txt
 # если текстовый файл находится не в каталоге программы, то пишем полный путь к нему
 # "C:/Users/Александр/OneDrive/Рабочий стол/python/FreelanceTask2/freelanceTask3/firstText.txt" (использ.:'/'!)
 f = open('recipes.txt', 'r', encoding='UTF-8')
 recipes = f.read().split('\n\n\n')
 f.close()
+
+# Загружаем список с рекламными объявлениями из файла promotions.txt
+p = open('promotions.txt', 'r', encoding='UTF-8')
+prom_list = p.read().split('\n\n\n')
+p.close()
 
 # Создаем бота
 bot = telebot.TeleBot(token)
@@ -38,9 +43,11 @@ def handle_text(message):
     # Формируем запрос юзера в виде списка (убираем предлоги) и уменьшаем регистр
     user_question = [a.lower() for a in message.text.split() if len(a) > 3]
 
-    # Если юзер прислал "Рецепт", выдаем ему случайный рецепт
+    # Если сообщение от юзера содержит слово "рецепт", выдает ему случайный рецепт
     if 'рецепт' in user_question:  # правильные запросы "Рецепт" и "рецепт"
-        answer = random.choice(recipes)
+        answer = random.choice(recipes)  # рецепт
+        promo = random.choice(prom_list)  # реклама
+        answer += '\n\n' + promo
         # Отсылаем юзеру сообщение в его чат
         bot.send_message(message.chat.id, answer)
     else:
