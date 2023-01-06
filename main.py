@@ -24,6 +24,8 @@ p.close()
 # Создаем бота
 bot = telebot.TeleBot(token)
 
+start_index = 0  # с этого рецепта начинается поиск
+
 
 def search_recipe(question, recipes_list):
     """
@@ -35,7 +37,10 @@ def search_recipe(question, recipes_list):
     question_index = len(question)  # Количество слов в запросе юзера
     answer = ''
     answer_count = 0
-    for recipe in recipes_list:
+    global start_index
+    print(start_index)
+
+    for recipe in recipes_list[start_index:]:  # список от старта до конца
         counter = 0
         for word in question:
             recipe_low = str(recipe.lower())
@@ -45,6 +50,21 @@ def search_recipe(question, recipes_list):
             answer_count = counter
             answer = recipe  # принимаем рецепт как промежуточный ответ
         if answer_count == question_index:  # количество совпавших слов соответствует запросу
+            start_index = recipes_list.index(recipe)
+            return answer  # полное совпадение
+
+    # если в одной половине списка нет, то искать в другой
+    for recipe in recipes_list[:start_index]:  # список от начала до старта
+        counter = 0
+        for word in question:
+            recipe_low = str(recipe.lower())
+            if word in recipe_low:
+                counter += 1
+        if answer_count < counter:  # если число совпадений слов больше предыдущего
+            answer_count = counter
+            answer = recipe  # принимаем рецепт как промежуточный ответ
+        if answer_count == question_index:  # количество совпавших слов соответствует запросу
+            start_index = recipes_list.index(recipe)
             return answer  # полное совпадение
     return answer  # неполное совпадение запроса и ответа
 
@@ -67,7 +87,7 @@ def get_question(question_in):
     :param question_in: строка запроса от юзера
     :return: список слов для поиска [с заменой на английские буквы], [только русские буквы]
     """
-    ru_question = [a.lower() for a in question_in.text.split() if len(a) > 3]
+    ru_question = [a.lower() for a in question_in.text.split() if len(a) > 2]
     # словарь 'русская буква':'латинская буква'
     d_chars = {'А': 'A', 'а': 'a', 'В': 'B', 'е': 'e', 'Е': 'E', 'К': 'K', 'М': 'M', 'Н': 'H', 'о': 'o', 'О': 'O',
                'Р': 'P', 'с': 'c', 'С': 'C', 'Т': 'T', 'х': 'x', 'Х': 'X'}
@@ -84,7 +104,7 @@ def get_question(question_in):
 # Получение сообщений от юзера
 @bot.message_handler(content_types=["text"])
 def handle_text(message):
-    # Формируем запрос юзера в виде списка (убираем предлоги) и уменьшаем регистр[ английские буквы],[русские]
+    # Формируем запрос юзера в виде списка (убираем предлоги) и уменьшаем регистр [английские буквы], [русские]
     user_question_en, user_question_ru = get_question(message)
     promo = random.choice(prom_list)  # реклама
 
@@ -105,8 +125,6 @@ def handle_text(message):
                          \n \"Рецепт\", чтобы получить случайный рецепт.
                          \n "Пирог из яблок", если Вы ищете какое-то конкретное блюдо
                          \n "Яйца яблоки бананы", в случае, если нужен совет, что приготовить из конкретных продуктов""")
-
-
     else:
         bot.send_message(message.chat.id,
                          "К сожалению, слишком короткий запрос. Напишите подробней: \"Пирог из яблок\"")
