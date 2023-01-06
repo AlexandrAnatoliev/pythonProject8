@@ -1,7 +1,9 @@
 # pythonProject8
 
-# БОТ, ДЛЯ TELEGRAM-КАНАЛА С РЕЦЕПТАМИ
-# По нажатию кнопки бот присылает случайный рецепт в личку
+# БОТ, ДЛЯ TELEGRAM-КАНАЛА С РЕЦЕПТАМИ.
+# По нажатию кнопки бот присылает случайный рецепт в личку.
+# Осуществляет поиск рецепта запросу пользователя "пирог с курицей" или "яйца колбаса майонез".
+# Добавляет в текст рецепта рекламу
 
 import telebot
 import random
@@ -38,7 +40,6 @@ def search_recipe(question, recipes_list):
     answer = ''
     answer_count = 0
     global start_index
-    print(start_index)
 
     for recipe in recipes_list[start_index:]:  # список от старта до конца
         counter = 0
@@ -83,7 +84,7 @@ def start(m, res=False):
 
 def get_question(question_in):
     """
-    Формируем запрос юзера в виде списка (убираем предлоги), уменьшаем регистр, заменяем часть букв на английские, обрезаем окончания у слов
+    Формируем запрос юзера в виде ДВУХ списков (убираем предлоги "len(a) > 2"), уменьшаем регистр, заменяем часть букв на английские, обрезаем окончания у слов
     :param question_in: строка запроса от юзера
     :return: список слов для поиска [с заменой на английские буквы], [только русские буквы]
     """
@@ -101,7 +102,7 @@ def get_question(question_in):
     return eng_question, ru_question
 
 
-# Получение сообщений от юзера
+# Получает сообщение от юзера и формирует ему ответ
 @bot.message_handler(content_types=["text"])
 def handle_text(message):
     # Формируем запрос юзера в виде списка (убираем предлоги) и уменьшаем регистр [английские буквы], [русские]
@@ -110,11 +111,11 @@ def handle_text(message):
 
     # Если сообщение от юзера содержит слово "рецепт" (!рецепт содержит английские буквы), выдает ему случайный рецепт
     if 'рецепт' in user_question_ru:  # правильные запросы "Рецепт" и "рецепт"
-        answer = random.choice(recipes)  # рецепт
+        answer = random.choice(recipes)  # случайный рецепт
         answer += '\n\n' + promo
         # Отсылаем юзеру сообщение в его чат
         bot.send_message(message.chat.id, answer)
-    elif len(user_question_en) > 1:
+    elif len(user_question_en) > 1:  # если запрос содержит более одного слова
         answer = search_recipe(user_question_en, recipes)
         if len(answer) > 0:
             answer += '\n\n' + promo
