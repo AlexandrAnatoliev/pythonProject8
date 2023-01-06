@@ -86,7 +86,7 @@ start_index = 0  # с этого рецепта начинается поиск
     for recipe in recipes_list[start_index:]:  # список от старта до конца
         counter = 0
         for word in question:
-            recipe_low = str(recipe.lower())
+            recipe_low = str(recipe[:recipe.index("PEЦEПT:")].lower())  # берем только название рецепта и ингредиенты
             if word in recipe_low:
                 counter += 1
         if answer_count < counter:  # если число совпадений слов больше предыдущего
