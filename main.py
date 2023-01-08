@@ -11,26 +11,128 @@ from telebot import types
 
 from config import token
 
-try:  # Этот блок пишет причину ошибки  todo добавить исключения в документацию
-    # Загружаем список рецептов из файла recipes.txt
-    # если текстовый файл находится не в каталоге программы, то пишем полный путь к нему
-    # "C:/Users/Александр/OneDrive/Рабочий стол/python/FreelanceTask2/freelanceTask3/firstText.txt" (использ.:'/'!)
-    try:  # этот блок не прерывает работу программы
-        f = open('recipes.txt', 'r', encoding='UTF-8')
-        recipes = f.read().split('\n\n\n')
-    finally:
-        f.close()  # и закрывает открытый файл если он не прочитался
-
+try:
     # Загружаем список с рекламными объявлениями из файла promotions.txt
-    try:
+    try:  # этот блок не прерывает работу программы
         p = open('promotions.txt', 'r', encoding='UTF-8')
         prom_list = p.read().split('\n\n\n')
     finally:
-        p.close()
+        p.close()  # и закрывает открытый файл если он не прочитался
+
+    # Загружаем список рецептов1
+    try:
+        f = open('recipes1.txt', 'r', encoding='UTF-8')
+        recipes1 = f.read().split('\n\n\n')
+    finally:
+        f.close()
+
+    # Загружаем список рецептов2
+    try:
+        f = open('recipes2.txt', 'r', encoding='UTF-8')
+        recipes2 = f.read().split('\n\n\n')
+    finally:
+        f.close()
+
+    # Загружаем список рецептов3
+    try:
+        f = open('recipes3.txt', 'r', encoding='UTF-8')
+        recipes3 = f.read().split('\n\n\n')
+    finally:
+        f.close()
+
+    # Загружаем список рецептов4
+    try:
+        f = open('recipes4.txt', 'r', encoding='UTF-8')
+        recipes4 = f.read().split('\n\n\n')
+    finally:
+        f.close()
+
+    # Загружаем список рецептов5
+    try:
+        f = open('recipes5.txt', 'r', encoding='UTF-8')
+        recipes5 = f.read().split('\n\n\n')
+    finally:
+        f.close()
+
+    # Загружаем список рецептов6
+    try:
+        f = open('recipes6.txt', 'r', encoding='UTF-8')
+        recipes6 = f.read().split('\n\n\n')
+    finally:
+        f.close()
+
+    # Загружаем список рецептов7
+    try:
+        f = open('recipes7.txt', 'r', encoding='UTF-8')
+        recipes7 = f.read().split('\n\n\n')
+    finally:
+        f.close()
+
+    # Загружаем список рецептов8
+    try:
+        f = open('recipes8.txt', 'r', encoding='UTF-8')
+        recipes8 = f.read().split('\n\n\n')
+    finally:
+        f.close()
+
+    # Загружаем список рецептов9
+    try:
+        f = open('recipes9.txt', 'r', encoding='UTF-8')
+        recipes9 = f.read().split('\n\n\n')
+    finally:
+        f.close()
+
+    # Загружаем список рецептов10
+    try:
+        f = open('recipes10.txt', 'r', encoding='UTF-8')
+        recipes10 = f.read().split('\n\n\n')
+    finally:
+        f.close()
+
 except FileNotFoundError:
     print("Невозможно открыть файл")
 except:
     print("Ошибка при работе с файлами")
+
+
+def random_recipe():
+    """
+    Выдает случайный список рецептов из заданных
+    :return: список рецептов
+    """
+    lst_nomber = random.randint(1, 10)
+    if lst_nomber == 1:
+        print(1)
+        return recipes1
+    elif lst_nomber == 2:
+        print(2)
+        return recipes2
+    elif lst_nomber == 3:
+        print(3)
+        return recipes3
+    elif lst_nomber == 4:
+        print(4)
+        return recipes4
+    elif lst_nomber == 5:
+        print(5)
+        return recipes5
+    elif lst_nomber == 6:
+        print(6)
+        return recipes6
+    elif lst_nomber == 7:
+        print(7)
+        return recipes7
+    elif lst_nomber == 8:
+        print(8)
+        return recipes8
+    elif lst_nomber == 9:
+        print(9)
+        return recipes9
+    else:
+        print(10)
+        return recipes10
+
+
 # Создаем бота
 bot = telebot.TeleBot(token)
 
@@ -52,9 +154,10 @@ def search_recipe(question, recipes_list):
     for recipe in recipes_list[start_index:]:  # список от старта до конца
         counter = 0
         for word in question:
-            recipe_low = str(recipe[:recipe.index("PEЦEПT:")].lower())  # берем только название рецепта и ингредиенты
-            if word in recipe_low:
-                counter += 1
+            if "PEЦEПT:" in recipe:  # если слово "РЕЦЕПТ" есть
+                recipe_low = str(recipe[:recipe.index("PEЦEПT:")].lower())  # берем только название рецепта и ингредиенты
+                if word in recipe_low:
+                    counter += 1
         if answer_count < counter:  # если число совпадений слов больше предыдущего
             answer_count = counter
             answer = recipe  # принимаем рецепт как промежуточный ответ
@@ -119,12 +222,13 @@ def handle_text(message):
 
     # Если сообщение от юзера содержит слово "рецепт" (!рецепт содержит английские буквы), выдает ему случайный рецепт
     if 'рецепт' in user_question_ru:  # правильные запросы "Рецепт" и "рецепт"
+        recipes = random_recipe()  # выбираем случайный список рецептов
         answer = random.choice(recipes)  # случайный рецепт
         answer += '\n\n' + promo
         # Отсылаем юзеру сообщение в его чат
         bot.send_message(message.chat.id, answer)
     elif len(user_question_en) > 1:  # если запрос содержит более одного слова
-        answer = search_recipe(user_question_en, recipes)
+        answer = search_recipe(user_question_en, recipes1)
         if len(answer) > 0:
             answer += '\n\n' + promo
             # посылаем юзеру найденный рецепт
