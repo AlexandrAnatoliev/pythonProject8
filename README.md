@@ -34,7 +34,7 @@ from config import token
 #### # Загружаем список рецептов из файла - рекламу аналогично
 
 ```python
-f = open('recipes.txt', 'r', encoding='UTF-8')
+f = open('recipes1.txt', 'r', encoding='UTF-8')
 recipes = f.read().split('\n')
 f.close()
 ```

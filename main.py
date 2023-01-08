@@ -102,7 +102,7 @@ def random_recipe():
     """
     lst_nomber = random.randint(1, 10)
     if lst_nomber == 1:
-        print(1)
+        print(1)  # todo убрать
         return recipes1
     elif lst_nomber == 2:
         print(2)
