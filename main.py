@@ -11,18 +11,26 @@ from telebot import types
 
 from config import token
 
-# Загружаем список рецептов из файла recipes.txt
-# если текстовый файл находится не в каталоге программы, то пишем полный путь к нему
-# "C:/Users/Александр/OneDrive/Рабочий стол/python/FreelanceTask2/freelanceTask3/firstText.txt" (использ.:'/'!)
-f = open('recipes.txt', 'r', encoding='UTF-8')
-recipes = f.read().split('\n\n\n')
-f.close()
+try:  # Этот блок пишет причину ошибки  todo добавить исключения в документацию
+    # Загружаем список рецептов из файла recipes.txt
+    # если текстовый файл находится не в каталоге программы, то пишем полный путь к нему
+    # "C:/Users/Александр/OneDrive/Рабочий стол/python/FreelanceTask2/freelanceTask3/firstText.txt" (использ.:'/'!)
+    try:  # этот блок не прерывает работу программы
+        f = open('recipes.txt', 'r', encoding='UTF-8')
+        recipes = f.read().split('\n\n\n')
+    finally:
+        f.close()  # и закрывает открытый файл если он не прочитался
 
-# Загружаем список с рекламными объявлениями из файла promotions.txt
-p = open('promotions.txt', 'r', encoding='UTF-8')
-prom_list = p.read().split('\n\n\n')
-p.close()
-
+    # Загружаем список с рекламными объявлениями из файла promotions.txt
+    try:
+        p = open('promotions.txt', 'r', encoding='UTF-8')
+        prom_list = p.read().split('\n\n\n')
+    finally:
+        p.close()
+except FileNotFoundError:
+    print("Невозможно открыть файл")
+except:
+    print("Ошибка при работе с файлами")
 # Создаем бота
 bot = telebot.TeleBot(token)
 
