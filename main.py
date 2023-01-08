@@ -136,10 +136,37 @@ def random_recipe():
 # Создаем бота
 bot = telebot.TeleBot(token)
 
-start_index = 0  # с этого рецепта начинается поиск
+start_index = 1  # с этого списка рецептов начинается поиск
 
 
-def search_recipe(question, recipes_list):
+def get_recept_list(start_ind=1):
+    """
+    По индексу файлы с рецептами
+    :return: список рецептов
+    """
+    if start_ind == 1:
+        return recipes1
+    if start_ind == 2:
+        return recipes2
+    if start_ind == 3:
+        return recipes3
+    if start_ind == 4:
+        return recipes4
+    if start_ind == 5:
+        return recipes5
+    if start_ind == 6:
+        return recipes6
+    if start_ind == 7:
+        return recipes7
+    if start_ind == 8:
+        return recipes8
+    if start_ind == 9:
+        return recipes9
+    else:
+        recipes10
+
+
+def search_recipe(question):
     """
     Ищет совпадения слов из запроса пользователя в списке рецептов.
     :param recipes_list: Список рецептов.
@@ -150,35 +177,41 @@ def search_recipe(question, recipes_list):
     answer = ''
     answer_count = 0
     global start_index
-
-    for recipe in recipes_list[start_index:]:  # список от старта до конца
-        counter = 0
-        for word in question:
-            if "PEЦEПT:" in recipe:  # если слово "РЕЦЕПТ" есть
-                recipe_low = str(recipe[:recipe.index("PEЦEПT:")].lower())  # берем только название рецепта и ингредиенты
-                if word in recipe_low:
-                    counter += 1
-        if answer_count < counter:  # если число совпадений слов больше предыдущего
-            answer_count = counter
-            answer = recipe  # принимаем рецепт как промежуточный ответ
-        if answer_count == question_index:  # количество совпавших слов соответствует запросу
-            start_index = recipes_list.index(recipe)
-            return answer  # полное совпадение
-
+    print(question)
+    for index in range(start_index, 10 + 1):  # перебираем файлы от старта до конца
+        for recipe in get_recept_list(index):  # список с рецептами от стартового списка до конца
+            counter = 0
+            for word in question:
+                if "РЕЦЕПТ:" in recipe:  # если слово "РЕЦЕПТ" есть
+                    recipe_low = str(
+                        recipe[:recipe.index("РЕЦЕПТ:")].lower())  # берем только название рецепта и ингредиенты
+                    if word in recipe_low:
+                        counter += 1
+            if answer_count < counter:  # если число совпадений слов больше предыдущего
+                answer_count = counter
+                answer = recipe  # принимаем рецепт как промежуточный ответ
+            if answer_count == question_index:  # количество совпавших слов соответствует запросу
+                start_index = index  # новый стартовый индекс
+                return answer  # полное совпадение
+    if start_index == 1:  # если поиск шел с самого начала
+        return answer
     # если в одной половине списка нет, то искать в другой
-    for recipe in recipes_list[:start_index]:  # список от начала до старта
-        counter = 0
-        for word in question:
-            recipe_low = str(recipe.lower())
-            if word in recipe_low:
-                counter += 1
-        if answer_count < counter:  # если число совпадений слов больше предыдущего
-            answer_count = counter
-            answer = recipe  # принимаем рецепт как промежуточный ответ
-        if answer_count == question_index:  # количество совпавших слов соответствует запросу
-            start_index = recipes_list.index(recipe)
-            return answer  # полное совпадение
-    return answer  # неполное совпадение запроса и ответа
+    for index in range(1, start_index):
+        for recipe in get_recept_list(index):  # список с рецептами от стартового списка до конца
+            counter = 0
+            for word in question:
+                if "РЕЦЕПТ:" in recipe:  # если слово "РЕЦЕПТ" есть
+                    recipe_low = str(
+                        recipe[:recipe.index("РЕЦЕПТ:")].lower())  # берем только название рецепта и ингредиенты
+                    if word in recipe_low:
+                        counter += 1
+            if answer_count < counter:  # если число совпадений слов больше предыдущего
+                answer_count = counter
+                answer = recipe  # принимаем рецепт как промежуточный ответ
+            if answer_count == question_index:  # количество совпавших слов соответствует запросу
+                start_index = index  # новый стартовый индекс
+                return answer  # полное совпадение
+    return answer  # выдаем что нашли
 
 
 # Команда start
@@ -201,14 +234,24 @@ def get_question(question_in):
     """
     ru_question = [a.lower() for a in question_in.text.split() if len(a) > 2]
     # словарь 'русская буква':'латинская буква'
-    d_chars = {'А': 'A', 'а': 'a', 'В': 'B', 'е': 'e', 'Е': 'E', 'К': 'K', 'М': 'M', 'Н': 'H', 'о': 'o', 'О': 'O',
-               'Р': 'P', 'с': 'c', 'С': 'C', 'Т': 'T', 'х': 'x', 'Х': 'X'}
+    d_chars = {'а': 'a', 'е': 'e', 'о': 'o', 'с': 'c', 'х': 'x'}
+
     eng_question = []
     for word in ru_question:
         for char in d_chars:
+            if char == word[0]:  # если первая буква в рецепте была заглавная, то она может быть и русской!!!
+                first_char = char  # первая буква
+                word2 = word[1:]  # остальная часть слова
+                for char in d_chars:
+                    if char in word2:
+                        while char in word2:
+                            word2 = word2.replace(char, d_chars[char])
+                word2 = first_char + word2
+                eng_question.append(word2[:-1])  # добавляем аналог слова с первой русской буквой
             if char in word:
                 while char in word:
                     word = word.replace(char, d_chars[char])
+        word = word.lower()  # уменьшаем регистр, чтобы не зависеть от него в поиске
         eng_question.append(word[:-1])  # обрезаем окончание у слов "яблоки" -> "яблок"
     return eng_question, ru_question
 
@@ -224,11 +267,15 @@ def handle_text(message):
     if 'рецепт' in user_question_ru:  # правильные запросы "Рецепт" и "рецепт"
         recipes = random_recipe()  # выбираем случайный список рецептов
         answer = random.choice(recipes)  # случайный рецепт
-        answer += '\n\n' + promo
+        if len(answer) > 10:  # если текст рецепта достаточной длины todo добавить везде
+            answer += '\n\n' + promo
+        else:
+            answer = random.choice(recipes)  # еще раз
+            answer += '\n\n' + promo
         # Отсылаем юзеру сообщение в его чат
         bot.send_message(message.chat.id, answer)
     elif len(user_question_en) > 1:  # если запрос содержит более одного слова
-        answer = search_recipe(user_question_en, recipes1)
+        answer = search_recipe(user_question_en)
         if len(answer) > 0:
             answer += '\n\n' + promo
             # посылаем юзеру найденный рецепт
