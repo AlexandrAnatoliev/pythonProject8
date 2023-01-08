@@ -1,4 +1,4 @@
-# pythonProject8
+# pythonProject8  todo документация
 
 # БОТ, ДЛЯ TELEGRAM-КАНАЛА С РЕЦЕПТАМИ.
 # По нажатию кнопки бот присылает случайный рецепт в личку.
@@ -102,34 +102,24 @@ def random_recipe():
     """
     lst_nomber = random.randint(1, 10)
     if lst_nomber == 1:
-        print(1)  # todo убрать
         return recipes1
     elif lst_nomber == 2:
-        print(2)
         return recipes2
     elif lst_nomber == 3:
-        print(3)
         return recipes3
     elif lst_nomber == 4:
-        print(4)
         return recipes4
     elif lst_nomber == 5:
-        print(5)
         return recipes5
     elif lst_nomber == 6:
-        print(6)
         return recipes6
     elif lst_nomber == 7:
-        print(7)
         return recipes7
     elif lst_nomber == 8:
-        print(8)
         return recipes8
     elif lst_nomber == 9:
-        print(9)
         return recipes9
     else:
-        print(10)
         return recipes10
 
 
@@ -178,9 +168,9 @@ def search_recipe(question):
     answer = ''
     answer_count = 0
     global start_index
-    print(question)
+
     for index in range(start_index, 10+1):  # перебираем файлы от старта до конца
-        print(index)
+
         for recipe in get_recept_list(index):  # список с рецептами от стартового списка до конца
             counter = 0
             for word in question:
