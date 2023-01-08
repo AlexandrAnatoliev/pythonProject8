@@ -162,14 +162,15 @@ def get_recept_list(start_ind=1):
         return recipes8
     if start_ind == 9:
         return recipes9
+    if start_ind == 10:
+        return recipes10
     else:
-        recipes10
+        recipes1
 
 
 def search_recipe(question):
     """
     Ищет совпадения слов из запроса пользователя в списке рецептов.
-    :param recipes_list: Список рецептов.
     :param question: Список слов запроса пользователя.
     :return: Искомый рецепт.
     """
@@ -178,7 +179,8 @@ def search_recipe(question):
     answer_count = 0
     global start_index
     print(question)
-    for index in range(start_index, 10 + 1):  # перебираем файлы от старта до конца
+    for index in range(start_index, 10+1):  # перебираем файлы от старта до конца
+        print(index)
         for recipe in get_recept_list(index):  # список с рецептами от стартового списка до конца
             counter = 0
             for word in question:
@@ -276,7 +278,7 @@ def handle_text(message):
         bot.send_message(message.chat.id, answer)
     elif len(user_question_en) > 1:  # если запрос содержит более одного слова
         answer = search_recipe(user_question_en)
-        if len(answer) > 0:
+        if answer is not None:
             answer += '\n\n' + promo
             # посылаем юзеру найденный рецепт
             bot.send_message(message.chat.id, answer)
