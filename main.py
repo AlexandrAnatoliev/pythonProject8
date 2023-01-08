@@ -269,7 +269,7 @@ def handle_text(message):
     if 'рецепт' in user_question_ru:  # правильные запросы "Рецепт" и "рецепт"
         recipes = random_recipe()  # выбираем случайный список рецептов
         answer = random.choice(recipes)  # случайный рецепт
-        if len(answer) > 10:  # если текст рецепта достаточной длины todo добавить везде
+        if len(answer) > 10:  # если текст рецепта достаточной длины
             answer += '\n\n' + promo
         else:
             answer = random.choice(recipes)  # еще раз
@@ -278,7 +278,7 @@ def handle_text(message):
         bot.send_message(message.chat.id, answer)
     elif len(user_question_en) > 1:  # если запрос содержит более одного слова
         answer = search_recipe(user_question_en)
-        if answer is not None:
+        if len(answer) > 10:
             answer += '\n\n' + promo
             # посылаем юзеру найденный рецепт
             bot.send_message(message.chat.id, answer)
