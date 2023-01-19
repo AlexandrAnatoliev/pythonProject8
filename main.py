@@ -88,28 +88,96 @@ try:
         recipes10 = f.read().split('\n\n\n')
     finally:
         f.close()
+    # Загружаем список рецептов11
+    try:
+        f = open('rec2/recipes11.txt', 'r', encoding='UTF-8')
+        recipes11 = f.read().split('\n\n\n')
+    finally:
+        f.close()
 
+    # Загружаем список рецептов12
+    try:
+        f = open('rec2/recipes12.txt', 'r', encoding='UTF-8')
+        recipes12 = f.read().split('\n\n\n')
+    finally:
+        f.close()
+
+    # Загружаем список рецептов13
+    try:
+        f = open('rec2/recipes13.txt', 'r', encoding='UTF-8')
+        recipes13 = f.read().split('\n\n\n')
+    finally:
+        f.close()
+
+    # Загружаем список рецептов14
+    try:
+        f = open('rec2/recipes14.txt', 'r', encoding='UTF-8')
+        recipes14 = f.read().split('\n\n\n')
+    finally:
+        f.close()
+
+    # Загружаем список рецептов15
+    try:
+        f = open('rec2/recipes15.txt', 'r', encoding='UTF-8')
+        recipes15 = f.read().split('\n\n\n')
+    finally:
+        f.close()
+
+    # Загружаем список рецептов16
+    try:
+        f = open('rec2/recipes16.txt', 'r', encoding='UTF-8')
+        recipes16 = f.read().split('\n\n\n')
+    finally:
+        f.close()
+
+    # Загружаем список рецептов17
+    try:
+        f = open('rec2/recipes17.txt', 'r', encoding='UTF-8')
+        recipes17 = f.read().split('\n\n\n')
+    finally:
+        f.close()
+
+    # Загружаем список рецептов18
+    try:
+        f = open('rec2/recipes18.txt', 'r', encoding='UTF-8')
+        recipes18 = f.read().split('\n\n\n')
+    finally:
+        f.close()
+
+    # Загружаем список рецептов19
+    try:
+        f = open('rec2/recipes19.txt', 'r', encoding='UTF-8')
+        recipes19 = f.read().split('\n\n\n')
+    finally:
+        f.close()
+
+    # Загружаем список рецептов20
+    try:
+        f = open('rec2/recipes20.txt', 'r', encoding='UTF-8')
+        recipes20 = f.read().split('\n\n\n')
+    finally:
+        f.close()
 except FileNotFoundError:
     print("Невозможно открыть файл")
 except:
     print("Ошибка при работе с файлами")
 
-
 # Список списков с рецептами
-r_list = [recipes1, recipes2, recipes3, recipes4, recipes5, recipes6, recipes7, recipes8, recipes9, recipes10]
+r_list = [recipes1, recipes2, recipes3, recipes4, recipes5, recipes6, recipes7, recipes8, recipes9, recipes10,
+          recipes11, recipes12, recipes13, recipes14, recipes15, recipes16, recipes17, recipes18, recipes19, recipes20]
 
 # Создаем бота
 bot = telebot.TeleBot(token)
 
-start_index = 1  # с этого списка рецептов начинается поиск
+start_index = 0  # с этого списка рецептов начинается поиск
 
 
-def get_recept_list(start_ind=1):
+def get_recept_list(start_ind=0):
     """
     По индексу файлы с рецептами
     :return: список рецептов
     """
-    return r_list[start_ind-1]
+    return r_list[start_ind]
 
 
 def search_recipe(question):
@@ -123,7 +191,9 @@ def search_recipe(question):
     answer_count = 0
     global start_index
 
-    for index in range(start_index, 10 + 1):  # перебираем файлы от старта до конца
+    # print(start_index)  # проверка работоспособности - выводит номер списка с рецептами
+
+    for index in range(start_index, len(r_list)):  # перебираем файлы от старта до конца
 
         for recipe in get_recept_list(index):  # список с рецептами от стартового списка до конца
             counter = 0
@@ -139,10 +209,10 @@ def search_recipe(question):
             if answer_count == question_index:  # количество совпавших слов соответствует запросу
                 start_index = index  # новый стартовый индекс
                 return answer  # полное совпадение
-    if start_index == 1:  # если поиск шел с самого начала
+    if start_index == 0:  # если поиск шел с самого начала
         return answer
     # если в одной половине списка нет, то искать в другой
-    for index in range(1, start_index):
+    for index in range(0, start_index):
         for recipe in get_recept_list(index):  # список с рецептами от стартового списка до конца
             counter = 0
             for word in question:
@@ -212,6 +282,9 @@ def handle_text(message):
     # Если сообщение от юзера содержит слово "рецепт" (!рецепт содержит английские буквы), выдает ему случайный рецепт
     if 'рецепт' in user_question_ru:  # правильные запросы "Рецепт" и "рецепт"
         recipes = random.choice(r_list)  # выбираем случайный список рецептов из списка рецептов
+
+        # print(r_list.index(recipes))  # выводит номер списка с рецептами для проверки
+
         answer = random.choice(recipes)  # случайный рецепт
         if len(answer) > 10:  # если текст рецепта достаточной длины
             answer += '\n\n' + promo
