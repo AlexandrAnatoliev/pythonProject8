@@ -21,70 +21,70 @@ try:
 
     # Загружаем список рецептов1
     try:
-        f = open('recipes1.txt', 'r', encoding='UTF-8')
+        f = open('rec1/recipes1.txt', 'r', encoding='UTF-8')
         recipes1 = f.read().split('\n\n\n')
     finally:
         f.close()
 
     # Загружаем список рецептов2
     try:
-        f = open('recipes2.txt', 'r', encoding='UTF-8')
+        f = open('rec1/recipes2.txt', 'r', encoding='UTF-8')
         recipes2 = f.read().split('\n\n\n')
     finally:
         f.close()
 
     # Загружаем список рецептов3
     try:
-        f = open('recipes3.txt', 'r', encoding='UTF-8')
+        f = open('rec1/recipes3.txt', 'r', encoding='UTF-8')
         recipes3 = f.read().split('\n\n\n')
     finally:
         f.close()
 
     # Загружаем список рецептов4
     try:
-        f = open('recipes4.txt', 'r', encoding='UTF-8')
+        f = open('rec1/recipes4.txt', 'r', encoding='UTF-8')
         recipes4 = f.read().split('\n\n\n')
     finally:
         f.close()
 
     # Загружаем список рецептов5
     try:
-        f = open('recipes5.txt', 'r', encoding='UTF-8')
+        f = open('rec1/recipes5.txt', 'r', encoding='UTF-8')
         recipes5 = f.read().split('\n\n\n')
     finally:
         f.close()
 
     # Загружаем список рецептов6
     try:
-        f = open('recipes6.txt', 'r', encoding='UTF-8')
+        f = open('rec1/recipes6.txt', 'r', encoding='UTF-8')
         recipes6 = f.read().split('\n\n\n')
     finally:
         f.close()
 
     # Загружаем список рецептов7
     try:
-        f = open('recipes7.txt', 'r', encoding='UTF-8')
+        f = open('rec1/recipes7.txt', 'r', encoding='UTF-8')
         recipes7 = f.read().split('\n\n\n')
     finally:
         f.close()
 
     # Загружаем список рецептов8
     try:
-        f = open('recipes8.txt', 'r', encoding='UTF-8')
+        f = open('rec1/recipes8.txt', 'r', encoding='UTF-8')
         recipes8 = f.read().split('\n\n\n')
     finally:
         f.close()
 
     # Загружаем список рецептов9
     try:
-        f = open('recipes9.txt', 'r', encoding='UTF-8')
+        f = open('rec1/recipes9.txt', 'r', encoding='UTF-8')
         recipes9 = f.read().split('\n\n\n')
     finally:
         f.close()
 
     # Загружаем список рецептов10
     try:
-        f = open('recipes10.txt', 'r', encoding='UTF-8')
+        f = open('rec1/recipes10.txt', 'r', encoding='UTF-8')
         recipes10 = f.read().split('\n\n\n')
     finally:
         f.close()
@@ -122,6 +122,9 @@ def random_recipe():
     else:
         return recipes10
 
+
+# Список списков с рецептами
+r_list = [recipes1, recipes2, recipes3, recipes4, recipes5, recipes6, recipes7, recipes8, recipes9, recipes10]
 
 # Создаем бота
 bot = telebot.TeleBot(token)
@@ -169,7 +172,7 @@ def search_recipe(question):
     answer_count = 0
     global start_index
 
-    for index in range(start_index, 10+1):  # перебираем файлы от старта до конца
+    for index in range(start_index, 10 + 1):  # перебираем файлы от старта до конца
 
         for recipe in get_recept_list(index):  # список с рецептами от стартового списка до конца
             counter = 0
@@ -257,7 +260,7 @@ def handle_text(message):
 
     # Если сообщение от юзера содержит слово "рецепт" (!рецепт содержит английские буквы), выдает ему случайный рецепт
     if 'рецепт' in user_question_ru:  # правильные запросы "Рецепт" и "рецепт"
-        recipes = random_recipe()  # выбираем случайный список рецептов
+        recipes = random.choice(r_list)  # выбираем случайный список рецептов из списка рецептов
         answer = random.choice(recipes)  # случайный рецепт
         if len(answer) > 10:  # если текст рецепта достаточной длины
             answer += '\n\n' + promo
