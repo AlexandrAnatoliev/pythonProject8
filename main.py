@@ -95,34 +95,6 @@ except:
     print("Ошибка при работе с файлами")
 
 
-def random_recipe():
-    """
-    Выдает случайный список рецептов из заданных
-    :return: список рецептов
-    """
-    lst_nomber = random.randint(1, 10)
-    if lst_nomber == 1:
-        return recipes1
-    elif lst_nomber == 2:
-        return recipes2
-    elif lst_nomber == 3:
-        return recipes3
-    elif lst_nomber == 4:
-        return recipes4
-    elif lst_nomber == 5:
-        return recipes5
-    elif lst_nomber == 6:
-        return recipes6
-    elif lst_nomber == 7:
-        return recipes7
-    elif lst_nomber == 8:
-        return recipes8
-    elif lst_nomber == 9:
-        return recipes9
-    else:
-        return recipes10
-
-
 # Список списков с рецептами
 r_list = [recipes1, recipes2, recipes3, recipes4, recipes5, recipes6, recipes7, recipes8, recipes9, recipes10]
 
@@ -137,28 +109,7 @@ def get_recept_list(start_ind=1):
     По индексу файлы с рецептами
     :return: список рецептов
     """
-    if start_ind == 1:
-        return recipes1
-    if start_ind == 2:
-        return recipes2
-    if start_ind == 3:
-        return recipes3
-    if start_ind == 4:
-        return recipes4
-    if start_ind == 5:
-        return recipes5
-    if start_ind == 6:
-        return recipes6
-    if start_ind == 7:
-        return recipes7
-    if start_ind == 8:
-        return recipes8
-    if start_ind == 9:
-        return recipes9
-    if start_ind == 10:
-        return recipes10
-    else:
-        recipes1
+    return r_list[start_ind-1]
 
 
 def search_recipe(question):
