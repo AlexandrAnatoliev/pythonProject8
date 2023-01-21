@@ -19,9 +19,9 @@ try:
     finally:
         p.close()  # и закрывает открытый файл если он не прочитался
 except FileNotFoundError:
-    print("Невозможно открыть файл")
+    print("Невозможно открыть файл promotions.txt")
 except:
-    print("Ошибка при работе с файлами")
+    print("Ошибка при работе с файлом promotions.txt")
 
 try:
     # список с путями к рецептам
@@ -29,7 +29,10 @@ try:
                  'rec1/recipes5.txt', 'rec1/recipes6.txt', 'rec1/recipes7.txt', 'rec1/recipes8.txt',
                  'rec1/recipes9.txt', 'rec1/recipes10.txt', 'rec2/recipes11.txt', 'rec2/recipes12.txt',
                  'rec2/recipes13.txt', 'rec2/recipes14.txt', 'rec2/recipes15.txt', 'rec2/recipes16.txt',
-                 'rec2/recipes17.txt', 'rec2/recipes18.txt', 'rec2/recipes19.txt', 'rec2/recipes20.txt']
+                 'rec2/recipes17.txt', 'rec2/recipes18.txt', 'rec2/recipes19.txt', 'rec2/recipes20.txt',
+                 'rec3/recipes21.txt', 'rec3/recipes22.txt', 'rec3/recipes23.txt', 'rec3/recipes24.txt',
+                 'rec3/recipes25.txt', 'rec3/recipes26.txt', 'rec3/recipes27.txt', 'rec3/recipes28.txt',
+                 'rec3/recipes29.txt', 'rec3/recipes30.txt']
     r_list = []  # Список списков с рецептами
     # Загружаем список рецептов1
     for path_recipes in path_list:
@@ -39,9 +42,9 @@ try:
         finally:
             f.close()
 except FileNotFoundError:
-    print("Невозможно открыть файл")
+    print(f"Невозможно открыть файл: {path_list[len(r_list)]}")
 except:
-    print("Ошибка при работе с файлами")
+    print(f"Ошибка при работе с файлами {path_list[len(r_list)]}")
 
 # Создаем бота
 bot = telebot.TeleBot(token)
@@ -68,7 +71,7 @@ def search_recipe(question):
     answer_count = 0
     global start_index
 
-    # print(start_index)  # проверка работоспособности - выводит номер списка с рецептами
+    print(start_index)  # проверка работоспособности - выводит номер списка с рецептами todo
 
     for index in range(start_index, len(r_list)):  # перебираем файлы от старта до конца
 
@@ -160,7 +163,7 @@ def handle_text(message):
     if 'рецепт' in user_question_ru:  # правильные запросы "Рецепт" и "рецепт"
         recipes = random.choice(r_list)  # выбираем случайный список рецептов из списка рецептов
 
-        # print(r_list.index(recipes))  # выводит номер списка с рецептами для проверки
+        print(r_list.index(recipes))  # выводит номер списка с рецептами для проверки todo
 
         answer = random.choice(recipes)  # случайный рецепт
         if len(answer) > 10:  # если текст рецепта достаточной длины
