@@ -1,6 +1,6 @@
 # pythonProject8
 
-# БОТ, ДЛЯ TELEGRAM-КАНАЛА С РЕЦЕПТАМИ.
+# БОТ, ДЛЯ TELEGRAM-чата С РЕЦЕПТАМИ.
 # По нажатию кнопки бот присылает случайный рецепт в личку.
 # Осуществляет поиск рецепта запросу пользователя "пирог с курицей" или "яйца колбаса майонез".
 # Добавляет в текст рецепта рекламу
@@ -18,153 +18,30 @@ try:
         prom_list = p.read().split('\n\n\n')
     finally:
         p.close()  # и закрывает открытый файл если он не прочитался
-
-    # Загружаем список рецептов1
-    try:
-        f = open('rec1/recipes1.txt', 'r', encoding='UTF-8')
-        recipes1 = f.read().split('\n\n\n')
-    finally:
-        f.close()
-
-    # Загружаем список рецептов2
-    try:
-        f = open('rec1/recipes2.txt', 'r', encoding='UTF-8')
-        recipes2 = f.read().split('\n\n\n')
-    finally:
-        f.close()
-
-    # Загружаем список рецептов3
-    try:
-        f = open('rec1/recipes3.txt', 'r', encoding='UTF-8')
-        recipes3 = f.read().split('\n\n\n')
-    finally:
-        f.close()
-
-    # Загружаем список рецептов4
-    try:
-        f = open('rec1/recipes4.txt', 'r', encoding='UTF-8')
-        recipes4 = f.read().split('\n\n\n')
-    finally:
-        f.close()
-
-    # Загружаем список рецептов5
-    try:
-        f = open('rec1/recipes5.txt', 'r', encoding='UTF-8')
-        recipes5 = f.read().split('\n\n\n')
-    finally:
-        f.close()
-
-    # Загружаем список рецептов6
-    try:
-        f = open('rec1/recipes6.txt', 'r', encoding='UTF-8')
-        recipes6 = f.read().split('\n\n\n')
-    finally:
-        f.close()
-
-    # Загружаем список рецептов7
-    try:
-        f = open('rec1/recipes7.txt', 'r', encoding='UTF-8')
-        recipes7 = f.read().split('\n\n\n')
-    finally:
-        f.close()
-
-    # Загружаем список рецептов8
-    try:
-        f = open('rec1/recipes8.txt', 'r', encoding='UTF-8')
-        recipes8 = f.read().split('\n\n\n')
-    finally:
-        f.close()
-
-    # Загружаем список рецептов9
-    try:
-        f = open('rec1/recipes9.txt', 'r', encoding='UTF-8')
-        recipes9 = f.read().split('\n\n\n')
-    finally:
-        f.close()
-
-    # Загружаем список рецептов10
-    try:
-        f = open('rec1/recipes10.txt', 'r', encoding='UTF-8')
-        recipes10 = f.read().split('\n\n\n')
-    finally:
-        f.close()
-    # Загружаем список рецептов11
-    try:
-        f = open('rec2/recipes11.txt', 'r', encoding='UTF-8')
-        recipes11 = f.read().split('\n\n\n')
-    finally:
-        f.close()
-
-    # Загружаем список рецептов12
-    try:
-        f = open('rec2/recipes12.txt', 'r', encoding='UTF-8')
-        recipes12 = f.read().split('\n\n\n')
-    finally:
-        f.close()
-
-    # Загружаем список рецептов13
-    try:
-        f = open('rec2/recipes13.txt', 'r', encoding='UTF-8')
-        recipes13 = f.read().split('\n\n\n')
-    finally:
-        f.close()
-
-    # Загружаем список рецептов14
-    try:
-        f = open('rec2/recipes14.txt', 'r', encoding='UTF-8')
-        recipes14 = f.read().split('\n\n\n')
-    finally:
-        f.close()
-
-    # Загружаем список рецептов15
-    try:
-        f = open('rec2/recipes15.txt', 'r', encoding='UTF-8')
-        recipes15 = f.read().split('\n\n\n')
-    finally:
-        f.close()
-
-    # Загружаем список рецептов16
-    try:
-        f = open('rec2/recipes16.txt', 'r', encoding='UTF-8')
-        recipes16 = f.read().split('\n\n\n')
-    finally:
-        f.close()
-
-    # Загружаем список рецептов17
-    try:
-        f = open('rec2/recipes17.txt', 'r', encoding='UTF-8')
-        recipes17 = f.read().split('\n\n\n')
-    finally:
-        f.close()
-
-    # Загружаем список рецептов18
-    try:
-        f = open('rec2/recipes18.txt', 'r', encoding='UTF-8')
-        recipes18 = f.read().split('\n\n\n')
-    finally:
-        f.close()
-
-    # Загружаем список рецептов19
-    try:
-        f = open('rec2/recipes19.txt', 'r', encoding='UTF-8')
-        recipes19 = f.read().split('\n\n\n')
-    finally:
-        f.close()
-
-    # Загружаем список рецептов20
-    try:
-        f = open('rec2/recipes20.txt', 'r', encoding='UTF-8')
-        recipes20 = f.read().split('\n\n\n')
-    finally:
-        f.close()
 except FileNotFoundError:
     print("Невозможно открыть файл")
 except:
     print("Ошибка при работе с файлами")
 
-# Список списков с рецептами
-r_list = [recipes1, recipes2, recipes3, recipes4, recipes5, recipes6, recipes7, recipes8, recipes9, recipes10,
-          recipes11, recipes12, recipes13, recipes14, recipes15, recipes16, recipes17, recipes18, recipes19, recipes20]
+try:
+    # список с путями к рецептам
+    path_list = ['rec1/recipes1.txt', 'rec1/recipes2.txt', 'rec1/recipes3.txt', 'rec1/recipes4.txt',
+                 'rec1/recipes5.txt', 'rec1/recipes6.txt', 'rec1/recipes7.txt', 'rec1/recipes8.txt',
+                 'rec1/recipes9.txt', 'rec1/recipes10.txt', 'rec2/recipes11.txt', 'rec2/recipes12.txt',
+                 'rec2/recipes13.txt', 'rec2/recipes14.txt', 'rec2/recipes15.txt', 'rec2/recipes16.txt',
+                 'rec2/recipes17.txt', 'rec2/recipes18.txt', 'rec2/recipes19.txt', 'rec2/recipes20.txt']
+    r_list = []  # Список списков с рецептами
+    # Загружаем список рецептов1
+    for path_recipes in path_list:
+        try:
+            f = open(path_recipes, 'r', encoding='UTF-8')
+            r_list.append(f.read().split('\n\n\n'))
+        finally:
+            f.close()
+except FileNotFoundError:
+    print("Невозможно открыть файл")
+except:
+    print("Ошибка при работе с файлами")
 
 # Создаем бота
 bot = telebot.TeleBot(token)
