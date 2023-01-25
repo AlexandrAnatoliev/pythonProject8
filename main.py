@@ -57,13 +57,13 @@ print(f"загружено {len(r_list)} файлов")
 # Создаем бота
 bot = telebot.TeleBot(token)
 
-start_index = 0  # с этого списка рецептов начинается поиск
+start_index = 0  # с этого рецепта начинается поиск
 
 
 def get_recept_list(start_ind=0):
     """
-    По индексу файлы с рецептами
-    :return: список рецептов
+    По индексу файла с рецептами
+    :return: возвращает список рецептов
     """
     return r_list[start_ind]
 

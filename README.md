@@ -57,40 +57,38 @@ except:
     print("Ошибка при работе с файлами")
 ```
 
-#### Выдает случайный список рецептов из заданных
+#### Загружаем список рецептов
+
+В случае ошибки при загрузке выводим название поврежденного файла. По окончании загрузки выводим количество загруженных
+файлов
 
 ```python
-def random_recipe():
-    lst_nomber = random.randint(1, 10)
-    if lst_nomber == 1:
-        return recipes1
-    elif lst_nomber == 2:
-        return recipes2
-    else:
-        return recipes10
+try:
+    # список с путями к рецептам
+    path_list = ['rec1/recipes1.txt', 'rec1/recipes2.txt', 'rec1/recipes3.txt', 'rec1/recipes4.txt',
+                 'rec5/recipes53.txt', 'rec5/recipes54.txt']
+    r_list = []  # Список списков с рецептами
+
+    # Загружаем список рецептов1
+    for path_recipes in path_list:
+        try:
+            f = open(path_recipes, 'r', encoding='UTF-8')
+            r_list.append(f.read().split('\n\n\n'))
+        finally:
+            f.close()
+except FileNotFoundError:
+    print(f"Невозможно открыть файл: {path_list[len(r_list)]}")
+except:
+    print(f"Ошибка при работе с файлами {path_list[len(r_list)]}")
+
+print(f"загружено {len(r_list)} файлов")
 ```
 
-#### При поиске рецепта перебирает индекс
+#### По индексу возвращает файл с рецептами
 
 ```python
-start_index = 1  # с этого списка рецептов начинается поиск
-
-
-def search_recipe(question):
-    global start_index
-    for index in range(start_index, 10 + 1):
-```
-
-#### и по индексу возвращает файл с рецептами
-
-```python
-def get_recept_list(start_ind=1):
-    if start_ind == 1:
-        return recipes1
-    if start_ind == 10:
-        return recipes10
-    else:
-        recipes1
+def get_recept_list(start_ind=0):
+    return r_list[start_ind]
 ```
 
 #### Добавляем кнопку
@@ -139,7 +137,8 @@ def get_question(question_in):
 #### Ищет совпадения слов из запроса пользователя в списке рецептов.
 
 ```python
-start_index = 1  # с этого рецепта начинается поиск
+start_index = 0  # с этого рецепта начинается поиск
+
 
 def search_recipe(question):
     question_index = len(question)  # Количество слов в запросе юзера
@@ -147,7 +146,9 @@ def search_recipe(question):
     answer_count = 0
     global start_index
 
-    for index in range(start_index, 10 + 1):  # перебираем файлы от старта до конца
+    # print(start_index)  # проверка работоспособности - выводит номер списка с рецептами
+
+    for index in range(start_index, len(r_list)):  # перебираем файлы от старта до конца
 
         for recipe in get_recept_list(index):  # список с рецептами от стартового списка до конца
             counter = 0
@@ -163,10 +164,10 @@ def search_recipe(question):
             if answer_count == question_index:  # количество совпавших слов соответствует запросу
                 start_index = index  # новый стартовый индекс
                 return answer  # полное совпадение
-    if start_index == 1:  # если поиск шел с самого начала
+    if start_index == 0:  # если поиск шел с самого начала
         return answer
     # если в одной половине списка нет, то искать в другой
-    for index in range(1, start_index):
+    for index in range(0, start_index):
         for recipe in get_recept_list(index):  # список с рецептами от стартового списка до конца
             counter = 0
             for word in question:
